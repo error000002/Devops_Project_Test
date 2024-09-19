@@ -1,0 +1,33 @@
+name: CI  # The name of your workflow
+
+# Trigger the workflow on push or pull request events targeting the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Define the jobs to be run in this workflow
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+    - name: Checkout code  # Step 1: Check out the code from the repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python  # Step 2: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Specify the Python version
+
+    - name: Install dependencies  # Step 3: Install project dependencies
+      run: |
+        python -m venv venv  # Create a virtual environment
+        source venv/bin/activate  # Activate the virtual environment
+        pip install -r requirements.txt  # Install dependencies from requirements.txt
+
+    - name: Run tests  # Step 4: Run tests
+      run: |
+        source venv/bin/activate  # Activate the virtual environment
+        python -m unittest discover  # Discover and run unittests
